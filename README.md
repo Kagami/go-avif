@@ -96,6 +96,12 @@ avif -e pig.png -o piggy.avif --lossless
 avif -h
 ```
 
+## Display
+
+To display resulting AVIF files take a look at software listed
+[here](https://github.com/AOMediaCodec/av1-avif/wiki#demuxers--players). E.g.
+use [avif.js](https://kagami.github.io/avif.js/) web viewer.
+
 ## License
 
 go-avif is licensed under [CC0](COPYING).
