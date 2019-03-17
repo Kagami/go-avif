@@ -29,7 +29,7 @@ func Example_basic() {
 
 	img, _, err := image.Decode(src)
 	if err != nil {
-		log.Fatalf("Can't decode source image: %v", err)
+		log.Fatalf("Can't decode source file: %v", err)
 	}
 
 	err = avif.Encode(dst, img, nil)

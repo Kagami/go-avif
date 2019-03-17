@@ -43,7 +43,6 @@ import (
 	"github.com/Kagami/go-avif"
 )
 
-// This example shows the basic usage of the package.
 func main() {
 	if len(os.Args) != 3 {
 		log.Fatalf("Usage: %s src.jpg dst.avif", os.Args[0])
@@ -63,7 +62,7 @@ func main() {
 
 	img, _, err := image.Decode(src)
 	if err != nil {
-		log.Fatalf("Can't decode source image: %v", err)
+		log.Fatalf("Can't decode source file: %v", err)
 	}
 
 	err = avif.Encode(dst, img, nil)
