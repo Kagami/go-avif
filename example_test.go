@@ -9,10 +9,11 @@ import (
 	"github.com/Kagami/go-avif"
 )
 
-// This example shows the basic usage of the package.
-func Example_basic() {
+const usageHelp = "Usage: %s src.jpg dst.avif"
+
+func Example() {
 	if len(os.Args) != 3 {
-		log.Fatalf("Usage: %s src.jpg dst.avif", os.Args[0])
+		log.Fatalf(usageHelp, os.Args[0])
 	}
 
 	srcPath := os.Args[1]

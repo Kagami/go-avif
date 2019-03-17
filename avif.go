@@ -1,6 +1,6 @@
 // Package avif implements a AVIF image encoder.
 //
-// AVIF is defined in https://aomediacodec.github.io/av1-avif/
+// The AVIF specification is at https://aomediacodec.github.io/av1-avif/.
 package avif
 
 // #cgo CFLAGS: -Wall -O2 -DNDEBUG
@@ -15,13 +15,7 @@ import (
 	"runtime"
 )
 
-type Options struct {
-	Threads        int
-	Speed          int
-	Quality        int
-	SubsampleRatio *image.YCbCrSubsampleRatio
-}
-
+// Encoder constants.
 const (
 	MinSpeed   = 0
 	MaxSpeed   = 8
@@ -29,21 +23,34 @@ const (
 	MaxQuality = 63
 )
 
-var (
-	DefaultOptions = Options{
-		Threads:        0,
-		Speed:          4,
-		Quality:        25,
-		SubsampleRatio: nil,
-	}
-)
+// Options are the encoding parameters. Threads ranges from 1, 0 means
+// use all available cores. Speed ranges from MinSpeed to MaxSpeed.
+// Quality ranges from MinQuality to MaxQuality, lower is better, 0
+// means lossless encoding. SubsampleRatio specifies subsampling of the
+// encoded image, nil means 4:2:0.
+type Options struct {
+	Threads        int
+	Speed          int
+	Quality        int
+	SubsampleRatio *image.YCbCrSubsampleRatio
+}
 
+// DefaultOptions defines default encoder config.
+var DefaultOptions = Options{
+	Threads:        0,
+	Speed:          4,
+	Quality:        25,
+	SubsampleRatio: nil,
+}
+
+// An OptionsError reports that the passed options are not valid.
 type OptionsError string
 
 func (e OptionsError) Error() string {
 	return fmt.Sprintf("options error: %s", string(e))
 }
 
+// An EncoderError reports that the encoder error has occured.
 type EncoderError int
 
 func (e EncoderError) ToString() string {
@@ -65,6 +72,7 @@ func (e EncoderError) Error() string {
 	return fmt.Sprintf("encoder error: %s", e.ToString())
 }
 
+// A MuxerError reports that the muxer error has occured.
 type MuxerError string
 
 func (e MuxerError) Error() string {
