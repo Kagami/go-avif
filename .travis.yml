@@ -7,7 +7,7 @@ addons:
       - sourceline: "ppa:jonathonf/ffmpeg-4"
     packages:
       - libaom-dev
-script: go test -v ./...
+script: make build test
 notifications:
   email:
     on_success: never
