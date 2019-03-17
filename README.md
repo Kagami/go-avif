@@ -1,9 +1,9 @@
 # go-avif [![Build Status](https://travis-ci.org/Kagami/go-avif.svg?branch=master)](https://travis-ci.org/Kagami/go-avif) [![GoDoc](https://godoc.org/github.com/Kagami/go-avif?status.svg)](https://godoc.org/github.com/Kagami/go-avif)
 
-go-avif implements AVIF (AV1 Still Image File Format) encoder for Go using
-[libaom](https://aomedia.googlesource.com/aom/),
-[the highest quality](https://github.com/Kagami/av1-bench) AV1 codec at the
-moment.
+go-avif implements
+AVIF ([AV1 Still Image File Format](https://aomediacodec.github.io/av1-avif/))
+encoder for Go using libaom, [the highest quality](https://github.com/Kagami/av1-bench)
+AV1 codec at the moment.
 
 ## Requirements
 
