@@ -1,0 +1,7 @@
+# Temporary avif, libaom and MP4Box files
+/*.avif
+/*.obu
+/*.y4m
+/*.yuv
+/*.xml
+/*.png
