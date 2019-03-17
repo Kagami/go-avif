@@ -2,8 +2,8 @@
 
 go-avif implements
 AVIF ([AV1 Still Image File Format](https://aomediacodec.github.io/av1-avif/))
-encoder for Go using libaom, [the highest quality](https://github.com/Kagami/av1-bench)
-AV1 codec at the moment.
+encoder for Go using libaom, the [high quality](https://github.com/Kagami/av1-bench)
+AV1 codec.
 
 ## Requirements
 
