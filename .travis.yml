@@ -1,0 +1,13 @@
+dist: xenial
+language: go
+go: stable
+addons:
+  apt:
+    sources:
+      - sourceline: "ppa:jonathonf/ffmpeg-4"
+    packages:
+      - libaom-dev
+script: go test -v ./...
+notifications:
+  email:
+    on_success: never
