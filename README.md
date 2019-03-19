@@ -5,6 +5,8 @@ AVIF ([AV1 Still Image File Format](https://aomediacodec.github.io/av1-avif/))
 encoder for Go using libaom, the [high quality](https://github.com/Kagami/av1-bench)
 AV1 codec.
 
+[CLI](#cli) builds for Windows: [avif.exe](https://ci.appveyor.com/project/Kagami/go-avif/build/artifacts)
+
 ## Requirements
 
 Make sure libaom is installed. On typical Linux distro just run:
