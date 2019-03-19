@@ -11,7 +11,8 @@ install:
 
 build_script:
   - go get -v ./...
+  - cp %GOPATH%\bin\avif.exe .
 
 artifacts:
-  - path: ..\..\..\..\bin\avif.exe
+  - path: avif.exe
     name: $(APPVEYOR_PROJECT_NAME)
