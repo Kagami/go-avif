@@ -5,12 +5,12 @@ clone_folder: C:\projects\go-avif\src\github.com\Kagami\go-avif
 install:
   # Vars
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-  - set PATH=%PATH%;%LOCALAPPDATA%;C:\msys64\mingw64\bin
+  - set PATH=%PATH%;C:\projects;C:\msys64\mingw64\bin
   - set GOPATH=C:\projects\go-avif
-  - set CGO_CFLAGS="-I%LOCALAPPDATA:\=/%/aom"
-  - set CGO_LDFLAGS="-static -L%LOCALAPPDATA:\=/%\aom_build/%CONFIGURATION%"
+  - set CGO_CFLAGS="-I../../../../../aom"
+  - set CGO_LDFLAGS="-static -L../../../../../aom_build/%CONFIGURATION%"
   # Tools
-  - cd %LOCALAPPDATA%
+  - cd C:\projects
   - appveyor DownloadFile http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe -FileName yasm.exe
   # libaom
   - IF NOT EXIST aom git clone https://aomedia.googlesource.com/aom
@@ -28,5 +28,5 @@ artifacts:
     name: $(APPVEYOR_PROJECT_NAME)
 
 cache:
-  - '%LOCALAPPDATA%\aom'
-  - '%LOCALAPPDATA%\aom_build'
+  - C:\projects\aom
+  - C:\projects\aom_build
