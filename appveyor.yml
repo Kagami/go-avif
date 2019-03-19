@@ -7,15 +7,15 @@ install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set PATH=%PATH%;%LOCALAPPDATA%;C:\msys64\mingw64\bin
   - set GOPATH=C:\projects\go-avif
-  - set CGO_CFLAGS="-I%LOCALAPPDATA%\aom"
-  - set CGO_LDFLAGS="-static -L%LOCALAPPDATA%\aom_build\%CONFIGURATION%"
+  - set CGO_CFLAGS="-I %LOCALAPPDATA%\aom"
+  - set CGO_LDFLAGS="-static -L %LOCALAPPDATA%\aom_build\%CONFIGURATION%"
   # Tools
   - cd %LOCALAPPDATA%
   - appveyor DownloadFile http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe -FileName yasm.exe
-  - appveyor DownloadFile https://github.com/mozilla/sccache/releases/download/0.2.8/sccache-0.2.8-x86_64-pc-windows-msvc.tar.gz -FileName sccache.tar.gz
-  - tar -xvf sccache.tar.gz --strip-components=1 --no-anchored sccache.exe && mv sccache.exe ccache.exe
+  - appveyor DownloadFile https://github.com/mozilla/sccache/releases/download/0.2.8/sccache-0.2.8-x86_64-pc-windows-msvc.tar.gz -FileName sccache.tar.gz && tar -xvf sccache.tar.gz --strip-components=1 --no-anchored sccache.exe
   # libaom
   - git clone --depth=1 https://aomedia.googlesource.com/aom
+  - sed -i "s/ccache/sccache/" aom/build/cmake/aom_configure.cmake
   - mkdir aom_build && cd aom_build
   - cmake ../aom -G "Visual Studio 15 2017" -A x64 -DENABLE_CCACHE=1 -DCONFIG_AV1_DECODER=0 -DENABLE_DOCS=0 -DENABLE_EXAMPLES=0 -DENABLE_TOOLS=0 -DENABLE_TESTS=0 -DCONFIG_LOWBITDEPTH=1
   - cmake --build . --config %CONFIGURATION%
@@ -32,4 +32,4 @@ cache:
   - '%LOCALAPPDATA%\Mozilla\sccache'
 
 on_finish:
-  - ccache -s
+  - sccache -s
