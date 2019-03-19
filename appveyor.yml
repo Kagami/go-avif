@@ -7,8 +7,8 @@ install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set PATH=%PATH%;C:\projects;C:\msys64\mingw64\bin
   - set GOPATH=C:\projects\go-avif
-  - set CGO_CFLAGS="-I../../../../../aom"
-  - set CGO_LDFLAGS="-static -L../../../../../aom_build/%CONFIGURATION%"
+  - set "CGO_CFLAGS=-I../../../../../aom"
+  - set "CGO_LDFLAGS=-static -L../../../../../aom_build/%CONFIGURATION%"
   # Tools
   - cd C:\projects
   - appveyor DownloadFile http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe -FileName yasm.exe
