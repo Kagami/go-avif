@@ -1,6 +1,5 @@
 image: Visual Studio 2017
 configuration: Release
-
 clone_folder: C:\projects\go-avif\src\github.com\Kagami\go-avif
 
 install:
@@ -8,6 +7,8 @@ install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set PATH=%PATH%;%LOCALAPPDATA%
   - set GOPATH=C:\projects\go-avif
+  - set CGO_CFLAGS="-I%LOCALAPPDATA%\aom"
+  - set CGO_LDFLAGS="-static -L%LOCALAPPDATA%\aom_build\%CONFIGURATION%"
   # Tools
   - cd %LOCALAPPDATA%
   - appveyor DownloadFile http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe -FileName yasm.exe
@@ -16,18 +17,19 @@ install:
   # libaom
   - git clone --depth=1 https://aomedia.googlesource.com/aom
   - mkdir aom_build && cd aom_build
-  - cmake ../aom -G "Visual Studio 15 2017" -A x64 -DENABLE_CCACHE=1 -DCONFIG_AV1_DECODER=0 -DENABLE_DOCS=0 -DENABLE_EXAMPLES=0 -DENABLE_TOOLS=0 -DENABLE_TESTS=0 -DCONFIG_LOWBITDEPTH=1
+  - cmake ../aom -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DENABLE_CCACHE=1 -DCONFIG_AV1_DECODER=0 -DENABLE_DOCS=0 -DENABLE_EXAMPLES=0 -DENABLE_TOOLS=0 -DENABLE_TESTS=0 -DCONFIG_LOWBITDEPTH=1
   - cmake --build .
 
 build_script:
-  - go get ./...
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - go get -v ./...
 
 artifacts:
-  - path: C:\projects\go-avif\bin\avif.exe
+  - path: ..\..\..\..\bin\avif.exe
     name: $(APPVEYOR_PROJECT_NAME)
 
 cache:
   - '%LOCALAPPDATA%\Mozilla\sccache'
 
 on_finish:
-  - sccache -s
+  - ccache -s
