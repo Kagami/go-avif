@@ -122,7 +122,7 @@ func Encode(w io.Writer, m image.Image, o *Options) error {
 		// }
 	}
 	if o.Threads < 1 {
-		// return OptionsError("bad threads number")
+		return OptionsError("bad threads number")
 	}
 	if o.Speed < MinSpeed || o.Speed > MaxSpeed {
 		return OptionsError("bad speed value")
