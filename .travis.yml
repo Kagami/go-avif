@@ -4,18 +4,19 @@ go: stable
 matrix:
   include:
     # - os: windows
-    - os: linux
-      dist: xenial
+    - os: osx
+    # - os: linux
+    #  dist: xenial
 
 install:
   - set -e
+  - mkdir ~/aom && cd ~/aom
+  - git clone --depth=1 https://aomedia.googlesource.com/aom
+  - mkdir build && cd build
   - |
     if [[ $TRAVIS_OS_NAME == windows ]]; then
-      wget -O ~/bin/yasm.exe http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
       choco install vcredist2010
-      mkdir ~/aom && cd ~/aom
-      git clone --depth=1 https://aomedia.googlesource.com/aom
-      mkdir build && cd build
+      wget -O ~/bin/yasm.exe http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
       cmake ../aom -G 'MSYS Makefiles' \
         -DCMAKE_MAKE_PROGRAM=mingw32-make \
         -DCMAKE_C_COMPILER=gcc \
@@ -29,13 +30,23 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       mingw32-make -j3
       mingw32-make install
-      export CGO_CFLAGS="-IC:/Users/travis/aom/dist/include"
-      export CGO_LDFLAGS="-static -LC:/Users/travis/aom/dist/lib"
+      export CGO_CFLAGS="-I$HOME/aom/dist/include"
+      export CGO_LDFLAGS="-static -L$HOME/aom/dist/lib"
+    elif [[ $TRAVIS_OS_NAME == osx ]]; then
+      brew install yasm
+      cmake ../aom \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCONFIG_AV1_DECODER=0 \
+        -DENABLE_DOCS=0 \
+        -DENABLE_EXAMPLES=0 \
+        -DENABLE_TOOLS=0 \
+        -DENABLE_TESTS=0 \
+        -DCONFIG_LOWBITDEPTH=1
+      make -j3
+      make install
+      export CGO_LDFLAGS="-static"
     elif [[ $TRAVIS_OS_NAME == linux ]]; then
       sudo apt-get install -y yasm
-      mkdir ~/aom && cd ~/aom
-      git clone --depth=1 https://aomedia.googlesource.com/aom
-      mkdir build && cd build
       cmake ../aom \
         -DCMAKE_BUILD_TYPE=Release \
         -DCONFIG_AV1_DECODER=0 \
@@ -52,15 +63,25 @@ install:
 script:
   - cd $TRAVIS_BUILD_DIR
   - go get -v ./...
+  - cd ../../../../bin
+  - |
+    if [[ $TRAVIS_OS_NAME == windows ]]; then
+      mv avif.exe avif-win-x64.exe
+    elif [[ $TRAVIS_OS_NAME == osx ]]; then
+      mv avif avif-darwin-x64
+    elif [[ $TRAVIS_OS_NAME == linux ]]; then
+      mv avif avif-linux-x64
+    fi
 
 deploy:
   provider: releases
   api_key:
     secure: "kKtKp6gzFJ0Y/NxWhESyGhru960+F0d1uejHmgTCpQolVwBn2e5t5kqD4RT1JRlW9b5F0WpP41QJZISRKticT2iWuClQ8JjIrMZs80TO44PjVpfD0bds139d1WRK5rtBBrMugzfYij6Az7h/GputqTKW2C2wfVhC/dCBUPUQ/sVyEfuuIPy4LYzMG+VUf8hNg18YkOjQSIL8jejHbat1Ehg3iqD9wnGYcm8aB9fGifLqcun/bWiawgRxa5jL2fXY0qUAtJbAbck+P3bMsH01WNX63EA9iLYEBy3tU6Fg9bAdXDTAsraw3IXJ9jhaE1EM915AsjT70B0OQJJKOgODGU0K0eNlsUI/husbRTQIZiPONE5AMxRGf5V0khajR5bzu+qU6siv8I4JMSCCOVhkfR5849LrW3W6yojo3cqW41zSpZk5gjP50EoAAStUKtSrwJkZAHKOmmioIpjvg687EJdGfev31WUT7RQMXKoKwxTop57iDuGz88KsWC8AHN0AIL6yklDlrTplW3z+95c3rNTW4Ypswwu9TwPITc2tFox/WA7TkmVLjKs6qzZrf2mYqMHE5tUI7UArGHqacStTWedKBVUZpaJzHL53dMEoKxSmKN7FALbmgZ1YnO5jzU28OiozYF+FGn42EXu3IhXfM7/PdI2lOa8T+iase+AMz40="
   file_glob: true
-  file: ../../../../bin/avif*
+  file: avif*
   skip_cleanup: true
   draft: true
+  overwrite: true
 
 notifications:
   email:
