@@ -30,8 +30,8 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       mingw32-make -j3
       mingw32-make install
-      export CGO_CFLAGS="-I$HOME/aom/dist/include"
-      export CGO_LDFLAGS="-static -L$HOME/aom/dist/lib"
+      export CGO_CFLAGS="-IC:/Users/travis/aom/dist/include"
+      export CGO_LDFLAGS="-static -LC:/Users/travis/aom/dist/lib"
     elif [[ $TRAVIS_OS_NAME == osx ]]; then
       HOMEBREW_NO_AUTO_UPDATE=1 brew install yasm
       cmake ../aom \
