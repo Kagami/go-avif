@@ -79,7 +79,8 @@ deploy:
   file_glob: true
   file: avif*
   skip_cleanup: true
-  draft: true
+  on:
+    tags: true
 
 notifications:
   email:

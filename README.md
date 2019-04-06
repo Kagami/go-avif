@@ -1,11 +1,9 @@
-# go-avif [![Build Status](https://travis-ci.org/Kagami/go-avif.svg?branch=master)](https://travis-ci.org/Kagami/go-avif) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Kagami/go-avif?branch=master&svg=true)](https://ci.appveyor.com/project/Kagami/go-avif) [![GoDoc](https://godoc.org/github.com/Kagami/go-avif?status.svg)](https://godoc.org/github.com/Kagami/go-avif)
+# go-avif [![Build Status](https://travis-ci.org/Kagami/go-avif.svg?branch=master)](https://travis-ci.org/Kagami/go-avif) [![GoDoc](https://godoc.org/github.com/Kagami/go-avif?status.svg)](https://godoc.org/github.com/Kagami/go-avif)
 
 go-avif implements
 AVIF ([AV1 Still Image File Format](https://aomediacodec.github.io/av1-avif/))
 encoder for Go using libaom, the [high quality](https://github.com/Kagami/av1-bench)
 AV1 codec.
-
-[CLI](#cli) builds for Windows: [avif.exe](https://ci.appveyor.com/project/Kagami/go-avif/build/artifacts)
 
 ## Requirements
 
@@ -97,6 +95,10 @@ avif -e pig.png -o piggy.avif --lossless
 # Show help
 avif -h
 ```
+
+Static 64-bit builds for Windows, macOS and Linux are available at
+[releases page](https://github.com/Kagami/go-avif/releases). They include
+latest libaom from git at the moment of build.
 
 ## Display
 
