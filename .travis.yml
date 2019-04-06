@@ -1,13 +1,38 @@
-dist: xenial
 language: go
 go: stable
-addons:
-  apt:
-    sources:
-      - sourceline: "ppa:jonathonf/ffmpeg-4"
-    packages:
-      - libaom-dev
-script: make build test
+
+matrix:
+  include:
+    - os: windows
+
+install:
+  - |
+    set -e
+    if [[ $TRAVIS_OS_NAME == windows ]]; then
+      choco install msys2
+      mkdir ~/aom
+      cd ~/aom
+      pacman --noconfirm -S mingw-w64-x86_64-cmake mingw-w64-x86_64-yasm
+      git clone --depth=1 https://aomedia.googlesource.com/aom
+      mkdir aom_build
+      cd aom_build
+      cmake ../aom -G 'MSYS Makefiles' \
+        -DCMAKE_INSTALL_PREFIX=~/aom/dist \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCONFIG_AV1_DECODER=0 \
+        -DENABLE_DOCS=0 \
+        -DENABLE_EXAMPLES=0 \
+        -DENABLE_TOOLS=0 \
+        -DENABLE_TESTS=0 \
+        -DCONFIG_LOWBITDEPTH=1
+      make -j3
+      make install
+    fi
+
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - go get -v ./...
+
 notifications:
   email:
     on_success: never
