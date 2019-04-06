@@ -4,7 +4,9 @@ go: stable
 matrix:
   include:
     - os: windows
+      if: tag IS present
     - os: osx
+      if: tag IS present
     - os: linux
       dist: xenial
 
