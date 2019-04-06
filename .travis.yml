@@ -46,12 +46,22 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       make -j3
       sudo make install
-      export CGO_LDFLAGS="-static"
+      export CGO_LDFLAGS="-static -lm"
     fi
 
 script:
   - cd $TRAVIS_BUILD_DIR
+  - pwd
   - go get -v ./...
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "kKtKp6gzFJ0Y/NxWhESyGhru960+F0d1uejHmgTCpQolVwBn2e5t5kqD4RT1JRlW9b5F0WpP41QJZISRKticT2iWuClQ8JjIrMZs80TO44PjVpfD0bds139d1WRK5rtBBrMugzfYij6Az7h/GputqTKW2C2wfVhC/dCBUPUQ/sVyEfuuIPy4LYzMG+VUf8hNg18YkOjQSIL8jejHbat1Ehg3iqD9wnGYcm8aB9fGifLqcun/bWiawgRxa5jL2fXY0qUAtJbAbck+P3bMsH01WNX63EA9iLYEBy3tU6Fg9bAdXDTAsraw3IXJ9jhaE1EM915AsjT70B0OQJJKOgODGU0K0eNlsUI/husbRTQIZiPONE5AMxRGf5V0khajR5bzu+qU6siv8I4JMSCCOVhkfR5849LrW3W6yojo3cqW41zSpZk5gjP50EoAAStUKtSrwJkZAHKOmmioIpjvg687EJdGfev31WUT7RQMXKoKwxTop57iDuGz88KsWC8AHN0AIL6yklDlrTplW3z+95c3rNTW4Ypswwu9TwPITc2tFox/WA7TkmVLjKs6qzZrf2mYqMHE5tUI7UArGHqacStTWedKBVUZpaJzHL53dMEoKxSmKN7FALbmgZ1YnO5jzU28OiozYF+FGn42EXu3IhXfM7/PdI2lOa8T+iase+AMz40="
+  file_glob: true
+  file: ../../../../bin/avif*
+  skip_cleanup: true
+  draft: true
 
 notifications:
   email:
