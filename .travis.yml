@@ -46,12 +46,11 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       make -j3
       sudo make install
-      export CGO_LDFLAGS="-static -lm"
+      export CGO_LDFLAGS="-static -laom -lm"
     fi
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - pwd
   - go get -v ./...
 
 deploy:
