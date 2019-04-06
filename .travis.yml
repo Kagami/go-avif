@@ -14,6 +14,9 @@ install:
       git clone --depth=1 https://aomedia.googlesource.com/aom
       mkdir build && cd build
       cmake ../aom -G 'MSYS Makefiles' \
+        -DCMAKE_MAKE_PROGRAM=mingw32-make \
+        -DCMAKE_C_COMPILER=gcc \
+        -DCMAKE_CXX_COMPILER=g++ \
         -DCMAKE_INSTALL_PREFIX=~/aom/dist \
         -DCMAKE_BUILD_TYPE=Release \
         -DCONFIG_AV1_DECODER=0 \
@@ -22,8 +25,8 @@ install:
         -DENABLE_TOOLS=0 \
         -DENABLE_TESTS=0 \
         -DCONFIG_LOWBITDEPTH=1
-      make -j3
-      make install
+      mingw32-make -j3
+      mingw32-make install
       export CGO_CFLAGS="-IC:/Users/travis/aom/dist/include"
       export CGO_LDFLAGS="-static -LC:/Users/travis/aom/dist/lib"
     fi
