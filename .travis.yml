@@ -10,6 +10,7 @@ install:
   - |
     if [[ $TRAVIS_OS_NAME == windows ]]; then
       wget -O ~/bin/yasm.exe http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+      choco install vcredist2010
       mkdir ~/aom && cd ~/aom
       git clone --depth=1 https://aomedia.googlesource.com/aom
       mkdir build && cd build
