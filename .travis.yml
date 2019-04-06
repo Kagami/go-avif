@@ -19,7 +19,6 @@ install:
       cmake ../aom -G 'MSYS Makefiles' \
         -DCMAKE_MAKE_PROGRAM=mingw32-make \
         -DCMAKE_C_COMPILER=gcc \
-        -DCMAKE_CXX_COMPILER=g++ \
         -DCMAKE_INSTALL_PREFIX=~/aom/dist \
         -DCMAKE_BUILD_TYPE=Release \
         -DCONFIG_AV1_DECODER=0 \
@@ -47,6 +46,7 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       make -j3
       sudo make install
+      export CGO_LDFLAGS="-static"
     fi
 
 script:
