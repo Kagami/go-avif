@@ -3,10 +3,10 @@ go: stable
 
 matrix:
   include:
-    # - os: windows
+    - os: windows
     - os: osx
-    # - os: linux
-    #  dist: xenial
+    - os: linux
+      dist: xenial
 
 install:
   - if [[ $TRAVIS_OS_NAME != osx ]]; then set -e; fi
@@ -80,7 +80,6 @@ deploy:
   file: avif*
   skip_cleanup: true
   draft: true
-  overwrite: true
 
 notifications:
   email:
