@@ -6,16 +6,13 @@ matrix:
     - os: windows
 
 install:
+  - set -e
   - |
-    set -e
     if [[ $TRAVIS_OS_NAME == windows ]]; then
-      choco install msys2
-      mkdir ~/aom
-      cd ~/aom
-      pacman --noconfirm -S mingw-w64-x86_64-cmake mingw-w64-x86_64-yasm
+      wget -O ~/bin/yasm.exe http://www.tortall.net/projects/yasm/releases/yasm-1.3.0-win64.exe
+      mkdir ~/aom && cd ~/aom
       git clone --depth=1 https://aomedia.googlesource.com/aom
-      mkdir aom_build
-      cd aom_build
+      mkdir build && cd build
       cmake ../aom -G 'MSYS Makefiles' \
         -DCMAKE_INSTALL_PREFIX=~/aom/dist \
         -DCMAKE_BUILD_TYPE=Release \
@@ -27,6 +24,8 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       make -j3
       make install
+      export CGO_CFLAGS="-IC:/Users/travis/aom/dist/include"
+      export CGO_LDFLAGS="-static -LC:/Users/travis/aom/dist/lib"
     fi
 
 script:
