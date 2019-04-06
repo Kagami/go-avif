@@ -3,7 +3,9 @@ go: stable
 
 matrix:
   include:
-    - os: windows
+    # - os: windows
+    - os: linux
+      dist: xenial
 
 install:
   - set -e
@@ -30,6 +32,21 @@ install:
       mingw32-make install
       export CGO_CFLAGS="-IC:/Users/travis/aom/dist/include"
       export CGO_LDFLAGS="-static -LC:/Users/travis/aom/dist/lib"
+    elif [[ $TRAVIS_OS_NAME == linux ]]; then
+      sudo apt-get install -y yasm
+      mkdir ~/aom && cd ~/aom
+      git clone --depth=1 https://aomedia.googlesource.com/aom
+      mkdir build && cd build
+      cmake ../aom \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCONFIG_AV1_DECODER=0 \
+        -DENABLE_DOCS=0 \
+        -DENABLE_EXAMPLES=0 \
+        -DENABLE_TOOLS=0 \
+        -DENABLE_TESTS=0 \
+        -DCONFIG_LOWBITDEPTH=1
+      make -j3
+      sudo make install
     fi
 
 script:
