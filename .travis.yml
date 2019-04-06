@@ -9,7 +9,7 @@ matrix:
     #  dist: xenial
 
 install:
-  - set -e
+  - if [[ $TRAVIS_OS_NAME != osx ]]; then set -e; fi
   - mkdir ~/aom && cd ~/aom
   - git clone --depth=1 https://aomedia.googlesource.com/aom
   - mkdir build && cd build
@@ -33,7 +33,7 @@ install:
       export CGO_CFLAGS="-I$HOME/aom/dist/include"
       export CGO_LDFLAGS="-static -L$HOME/aom/dist/lib"
     elif [[ $TRAVIS_OS_NAME == osx ]]; then
-      brew install yasm
+      HOMEBREW_NO_AUTO_UPDATE=1 brew install yasm
       cmake ../aom \
         -DCMAKE_BUILD_TYPE=Release \
         -DCONFIG_AV1_DECODER=0 \
@@ -44,7 +44,6 @@ install:
         -DCONFIG_LOWBITDEPTH=1
       make -j3
       make install
-      export CGO_LDFLAGS="-static"
     elif [[ $TRAVIS_OS_NAME == linux ]]; then
       sudo apt-get install -y yasm
       cmake ../aom \
