@@ -17,17 +17,19 @@ import (
 
 // Encoder constants.
 const (
+	MinThreads = 1
+	MaxThreads = 64
 	MinSpeed   = 0
 	MaxSpeed   = 8
 	MinQuality = 0
 	MaxQuality = 63
 )
 
-// Options are the encoding parameters. Threads ranges from 1, 0 means
-// use all available cores. Speed ranges from MinSpeed to MaxSpeed.
-// Quality ranges from MinQuality to MaxQuality, lower is better, 0
-// means lossless encoding. SubsampleRatio specifies subsampling of the
-// encoded image, nil means 4:2:0.
+// Options are the encoding parameters. Threads ranges from MinThreads
+// to MaxThreads, 0 means use all available cores. Speed ranges from
+// MinSpeed to MaxSpeed. Quality ranges from MinQuality to MaxQuality,
+// lower is better, 0 means lossless encoding. SubsampleRatio specifies
+// subsampling of the encoded image, nil means 4:2:0.
 type Options struct {
 	Threads        int
 	Speed          int
@@ -113,6 +115,9 @@ func Encode(w io.Writer, m image.Image, o *Options) error {
 	}
 	if o.Threads == 0 {
 		o.Threads = runtime.NumCPU()
+		if o.Threads > MaxThreads {
+			o.Threads = MaxThreads
+		}
 	}
 	if o.SubsampleRatio == nil {
 		s := image.YCbCrSubsampleRatio420
@@ -121,7 +126,7 @@ func Encode(w io.Writer, m image.Image, o *Options) error {
 		// 	o.SubsampleRatio = &yuvImg.SubsampleRatio
 		// }
 	}
-	if o.Threads < 1 {
+	if o.Threads < MinThreads || o.Threads > MaxThreads {
 		return OptionsError("bad threads number")
 	}
 	if o.Speed < MinSpeed || o.Speed > MaxSpeed {
