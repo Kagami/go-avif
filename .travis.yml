@@ -6,9 +6,10 @@ matrix:
     - os: windows
       if: tag IS present
     - os: osx
+      osx_image: xcode11.2
       if: tag IS present
     - os: linux
-      dist: xenial
+      dist: bionic
 
 install:
   - if [[ $TRAVIS_OS_NAME != osx ]]; then set -e; fi
