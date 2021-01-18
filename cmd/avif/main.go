@@ -25,6 +25,7 @@ Options:
   -o <dst>, --output=<dst>  Destination filename
   -q <qp>, --quality=<qp>   Compression level (0..63), [default: 25]
   -s <spd>, --speed=<spd>   Compression speed (0..8), [default: 4]
+  -t <td>, --threads=<td>   Number of threads (1..64, 0 for all available cores), [default: 0]
   --lossless                Lossless compression (alias for -q 0)
   --best                    Slowest compression method (alias for -s 0)
   --fast                    Fastest compression method (alias for -s 8)
@@ -35,6 +36,7 @@ type config struct {
 	Output   string
 	Quality  int
 	Speed    int
+	Threads  int
 	Lossless bool
 	Best     bool
 	Fast     bool
@@ -62,6 +64,7 @@ func main() {
 	checkErr(err)
 	check(conf.Quality >= avif.MinQuality && conf.Quality <= avif.MaxQuality, "bad quality (0..63)")
 	check(conf.Speed >= avif.MinSpeed && conf.Speed <= avif.MaxSpeed, "bad speed (0..8)")
+	check(conf.Threads == 0 || (conf.Threads >= avif.MinThreads && conf.Threads <= avif.MaxThreads), "bad threads (0..64)")
 	check(!conf.Best || !conf.Fast, "can't use both --best and --fast")
 	if conf.Lossless {
 		conf.Quality = 0
@@ -74,6 +77,7 @@ func main() {
 	avifOpts := avif.Options{
 		Speed:   conf.Speed,
 		Quality: conf.Quality,
+		Threads: conf.Threads,
 	}
 
 	var src io.Reader
