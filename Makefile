@@ -1,4 +1,4 @@
-# Should contain src/github.com/Kagami/go-avif
+# Should contain src/github.com/kagami/go-avif
 export GOPATH = $(PWD)/../../../..
 
 all: build

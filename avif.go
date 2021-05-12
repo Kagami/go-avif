@@ -55,6 +55,7 @@ func (e OptionsError) Error() string {
 // An EncoderError reports that the encoder error has occured.
 type EncoderError int
 
+// ToString returns the string representation of an EncoderError.
 func (e EncoderError) ToString() string {
 	switch e {
 	case C.AVIF_ERROR_GENERAL:
