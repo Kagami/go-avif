@@ -1,19 +1,23 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 
-	"github.com/Kagami/go-avif"
 	"github.com/docopt/docopt-go"
+	"github.com/kagami/go-avif"
+	"github.com/nfnt/resize"
 )
 
-const VERSION = "0.0.0"
-const USAGE = `
+const version = "0.0.0"
+const usage = `
 Usage: avif [options] -e src_filename -o dst_filename
 
 AVIF encoder
@@ -23,6 +27,7 @@ Options:
   -V, --version             Display version number
   -e <src>, --encode=<src>  Source filename
   -o <dst>, --output=<dst>  Destination filename
+  -b <w:h>, --thumb=<w:h>   Maximum image dimensions
   -q <qp>, --quality=<qp>   Compression level (0..63), [default: 25]
   -s <spd>, --speed=<spd>   Compression speed (0..8), [default: 4]
   -t <td>, --threads=<td>   Number of threads (0..64, 0 for all available cores), [default: 0]
@@ -34,6 +39,7 @@ Options:
 type config struct {
 	Encode   string
 	Output   string
+	Thumb    string
 	Quality  int
 	Speed    int
 	Threads  int
@@ -58,7 +64,7 @@ func check(cond bool, errStr string) {
 
 func main() {
 	var conf config
-	opts, err := docopt.ParseArgs(USAGE, nil, VERSION)
+	opts, err := docopt.ParseArgs(usage, nil, version)
 	checkErr(err)
 	err = opts.Bind(&conf)
 	checkErr(err)
@@ -102,6 +108,19 @@ func main() {
 	// TODO(Kagami): Accept y4m.
 	img, _, err := image.Decode(src)
 	checkErr(err)
+
+	if conf.Thumb != "" {
+		split := strings.Split(conf.Thumb, ":")
+		if len(split) != 2 {
+			checkErr(errors.New("failed to create thumbnail: invalid dimensions, must be in w:h format"))
+		}
+		w, err := strconv.Atoi(split[0])
+		checkErr(err)
+		h, err := strconv.Atoi(split[1])
+		checkErr(err)
+
+		img = resize.Thumbnail(uint(w), uint(h), img, resize.Lanczos3)
+	}
 
 	err = avif.Encode(dst, img, &avifOpts)
 	checkErr(err)

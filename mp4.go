@@ -41,9 +41,8 @@ func ulen(s string) uint32 {
 func bflag(b bool, pos uint8) uint8 {
 	if b {
 		return 1 << (pos - 1)
-	} else {
-		return 0
 	}
+	return 0
 }
 
 func writeAll(w io.Writer, writers ...io.WriterTo) (err error) {
@@ -744,7 +743,7 @@ func muxFrame(w io.Writer, m image.Image, subsampling image.YCbCrSubsampleRatio,
 			lengthSize:     4,
 			baseOffsetSize: 4,
 			items: []boxILOCItem{
-				boxILOCItem{
+				{
 					itemID:  1,
 					extents: []boxILOCItemExtent{{}},
 				},
@@ -752,7 +751,7 @@ func muxFrame(w io.Writer, m image.Image, subsampling image.YCbCrSubsampleRatio,
 		},
 		itemInfos: boxIINF{
 			itemInfos: []boxINFEv2{
-				boxINFEv2{
+				{
 					itemID:   1,
 					itemType: itemTypeAV01,
 					itemName: "Image",
@@ -776,7 +775,7 @@ func muxFrame(w io.Writer, m image.Image, subsampling image.YCbCrSubsampleRatio,
 			},
 			association: boxIPMA{
 				entries: []boxIPMAAssociation{
-					boxIPMAAssociation{
+					{
 						itemID: 1,
 						props: []boxIPMAAssociationProperty{
 							{false, 1}, // non-essential width/height

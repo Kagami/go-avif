@@ -1,8 +1,8 @@
-# go-avif [![Build Status](https://travis-ci.org/Kagami/go-avif.svg?branch=master)](https://travis-ci.org/Kagami/go-avif) [![GoDoc](https://godoc.org/github.com/Kagami/go-avif?status.svg)](https://godoc.org/github.com/Kagami/go-avif)
+# go-avif [![Build Status](https://travis-ci.org/kagami/go-avif.svg?branch=master)](https://travis-ci.org/kagami/go-avif) [![GoDoc](https://godoc.org/github.com/kagami/go-avif?status.svg)](https://godoc.org/github.com/kagami/go-avif)
 
 go-avif implements
 AVIF ([AV1 Still Image File Format](https://aomediacodec.github.io/av1-avif/))
-encoder for Go using libaom, the [high quality](https://github.com/Kagami/av1-bench)
+encoder for Go using libaom, the [high quality](https://github.com/kagami/av1-bench)
 AV1 codec.
 
 ## Requirements
@@ -18,16 +18,16 @@ sudo apt-get install libaom-dev
 To use go-avif in your Go code:
 
 ```go
-import "github.com/Kagami/go-avif"
+import "github.com/kagami/go-avif"
 ```
 
 To install go-avif in your $GOPATH:
 
 ```bash
-go get github.com/Kagami/go-avif
+go get github.com/kagami/go-avif
 ```
 
-For further details see [GoDoc documentation](https://godoc.org/github.com/Kagami/go-avif).
+For further details see [GoDoc documentation](https://godoc.org/github.com/kagami/go-avif).
 
 ## Example
 
@@ -40,7 +40,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Kagami/go-avif"
+	"github.com/kagami/go-avif"
 )
 
 func main() {
@@ -81,7 +81,7 @@ PNG files to AVIF:
 
 ```bash
 # Compile and put avif binary to $GOPATH/bin
-go get github.com/Kagami/go-avif/...
+go get github.com/kagami/go-avif/...
 
 # Encode JPEG to AVIF with default settings
 avif -e cat.jpg -o kitty.avif
@@ -92,12 +92,15 @@ avif -e dog.png -o doggy.avif --best -q 15
 # Lossless encoding
 avif -e pig.png -o piggy.avif --lossless
 
+# Create thumbnail
+avif -e horse.png -o horsey.avif --thumb=640:480
+
 # Show help
 avif -h
 ```
 
 Static 64-bit builds for Windows, macOS and Linux are available at
-[releases page](https://github.com/Kagami/go-avif/releases). They include
+[releases page](https://github.com/kagami/go-avif/releases). They include
 latest libaom from git at the moment of build.
 
 ## Display

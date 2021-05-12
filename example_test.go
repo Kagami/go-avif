@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Kagami/go-avif"
+	"github.com/kagami/go-avif"
 )
 
 const usageHelp = "Usage: %s src.jpg dst.avif"
