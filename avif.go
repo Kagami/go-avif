@@ -154,19 +154,56 @@ func Encode(w io.Writer, m image.Image, o *Options) error {
 	defer C.free(dataPtr)
 	data := (*[1 << 30]byte)(dataPtr)[:dataSize:dataSize]
 
-	yPos := 0
-	uPos := ySize
-	for j := rec.Min.Y; j < rec.Max.Y; j++ {
-		for i := rec.Min.X; i < rec.Max.X; i++ {
-			r16, g16, b16, _ := m.At(i, j).RGBA()
-			y, u, v := rgb2yuv(r16, g16, b16)
-			data[yPos] = y
-			yPos++
-			// TODO(Kagami): Resample chroma planes with some better filter.
-			if (i-rec.Min.X)&1 == 0 && (j-rec.Min.Y)&1 == 0 {
-				data[uPos] = u
-				data[uPos+uSize] = v
-				uPos++
+	switch img := m.(type) {
+	case *image.YCbCr:
+		yPos := 0
+		uPos := ySize
+		for y := rec.Min.Y; y < rec.Max.Y; y++ {
+			for x := rec.Min.X; x < rec.Max.X; x++ {
+				r, g, b, _ := img.At(x, y).RGBA()
+				Y, u, v := rgb2yuv(r, g, b)
+				data[yPos] = Y
+				yPos++
+				// TODO(Kagami): Resample chroma planes with some better filter.
+				if (x-rec.Min.X)&1 == 0 && (y-rec.Min.Y)&1 == 0 {
+					data[uPos] = u
+					data[uPos+uSize] = v
+					uPos++
+				}
+			}
+		}
+	case *image.RGBA:
+		yPos := 0
+		uPos := ySize
+		for y := rec.Min.Y; y < rec.Max.Y; y++ {
+			for x := rec.Min.X; x < rec.Max.X; x++ {
+				r, g, b, _ := img.RGBAAt(x, y).RGBA()
+				Y, u, v := rgb2yuv(r, g, b)
+				data[yPos] = Y
+				yPos++
+				// TODO(Kagami): Resample chroma planes with some better filter.
+				if (x-rec.Min.X)&1 == 0 && (y-rec.Min.Y)&1 == 0 {
+					data[uPos] = u
+					data[uPos+uSize] = v
+					uPos++
+				}
+			}
+		}
+	default:
+		yPos := 0
+		uPos := ySize
+		for j := rec.Min.Y; j < rec.Max.Y; j++ {
+			for i := rec.Min.X; i < rec.Max.X; i++ {
+				r16, g16, b16, _ := img.At(i, j).RGBA()
+				y, u, v := rgb2yuv(r16, g16, b16)
+				data[yPos] = y
+				yPos++
+				// TODO(Kagami): Resample chroma planes with some better filter.
+				if (i-rec.Min.X)&1 == 0 && (j-rec.Min.Y)&1 == 0 {
+					data[uPos] = u
+					data[uPos+uSize] = v
+					uPos++
+				}
 			}
 		}
 	}
