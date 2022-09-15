@@ -725,7 +725,7 @@ func muxFrame(w io.Writer, m image.Image, subsampling image.YCbCrSubsampleRatio,
 
 	fileData := boxMDAT{data: obuData}
 	fileType := boxFTYP{
-		majorBrand:       itemTypeMIF1,
+		majorBrand:       itemTypeAVIF,
 		compatibleBrands: []fourCC{itemTypeMIF1, itemTypeAVIF, itemTypeMIAF},
 	}
 	metadata := boxMETA{
